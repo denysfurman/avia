@@ -2,8 +2,14 @@
   <div class="search-filter">
     <h3>Количество пересадок</h3>
     <ul >
-      <li v-for="option in filterList">
-        <input :id="'filter-' + option.option" @change="changeInput(option.option)" type="checkbox" :value="option.option" v-model="checked"><label :for="'filter-' + option.option" >{{ option.name }}</label>
+      <li v-for="option in filterList" :key="option.option">
+        <input 
+          :id="'filter-' + option.option" 
+          @change="changeInput(option.option)" 
+          type="checkbox" 
+          :value="option.option" 
+          v-model="checked">
+        <label :for="'filter-' + option.option" >{{ option.name }}</label>
       </li>
     </ul>
   </div>
@@ -43,7 +49,9 @@ export default {
   methods: {
     changeInput(option){
       if(option === 'all' && this.checked.includes(option)) {
-        this.checked = ['all', '0', '1','2','3']; 
+        this.checked = ['all','0','1','2','3']; 
+      } else {
+        this.checked =  this.checked.filter(el => el !== 'all')
       }
     }
   },

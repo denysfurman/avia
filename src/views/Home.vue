@@ -5,19 +5,21 @@
       <aside>
         <SearchFilter/>
       </aside>
-      <main>
-        <SearchList/>
+      <main >
+        <p class="error" v-if="hasError">Извините! Возникли проблемы </p>
+        <SearchList v-if="!loading && !hasError"/>
+         
       </main>
+      
     </div>
-    
   </div>
 </template>
 
 <script>
+import { mapActions, mapGetters } from 'vuex'
 import SearchList from '@/components/SearchList.vue'
 import SearchFilter from '@/components/SearchFilter.vue'
 import Header from '@/components/Header.vue'
-import searchApi from "@/api/search";
 
 export default {
   name: 'Home',
@@ -26,28 +28,14 @@ export default {
     SearchFilter,
     Header,
   },
-  data() {
-    return {
-      loading: true,
-      tickets: [],
-    };
+  async mounted () {
+    await  this.getSearchId();
   },
-
-  async mounted() {
-    this.loading = true;
-    try {
-      const { data } = await searchApi.getSearchID();
-      if(data?.searchId) {
-        const ticketsData = await searchApi.getTickets(data.searchId);
-        this.tickets = ticketsData.data;
-        console.log(ticketsData)
-      }
-      
-    } catch (e) {
-      console.error(e)
-    } finally {
-      this.loading = false;
-    }
+  computed: {
+    ...mapGetters([ 'loading', 'hasError']),
+  },
+  methods: {
+    ...mapActions([ 'getSearchId']),
   },
 }
 </script>
@@ -67,6 +55,10 @@ export default {
     main{
       width: calc(100% - 252px);
     }
+  }
+  .error{
+    font-size: 20px;
+    color: red;
   }
  
 </style>
