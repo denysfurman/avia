@@ -16,6 +16,8 @@
 </template>
 
 <script>
+import {mapActions} from "vuex";
+
 export default {
   name: "SearchFilter",
   data() {
@@ -47,12 +49,14 @@ export default {
   },
   
   methods: {
+    ...mapActions([ 'fillterStopsTickets']),
     changeInput(option){
       if(option === 'all' && this.checked.includes(option)) {
         this.checked = ['all','0','1','2','3']; 
       } else {
-        this.checked =  this.checked.filter(el => el !== 'all')
+        this.checked = this.checked.filter(el => el !== 'all');
       }
+      this.fillterStopsTickets(this.checked)
     }
   },
 }
