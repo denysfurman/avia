@@ -24,6 +24,17 @@ export default new Vuex.Store({
     },
     SET_TICKETS: (state, payload) => {
       state.stopSearch = payload.stop;
+      payload.tickets.forEach( el => {
+        let segmentsCount = 0;
+        if(el?.segments?.length){
+          el.segments.forEach(segment => {
+            if(segment?.stops?.length) {
+              segmentsCount = segmentsCount + segment.stops.length;
+            }
+          })
+        }
+        el.segmentsCount = segmentsCount;
+      });
       state.tickets = [...state.tickets, ...payload.tickets];
       state.filterTickets = state.tickets;
     },
@@ -35,17 +46,6 @@ export default new Vuex.Store({
         state.filterTickets = _.cloneDeep(state.tickets);
       } else {
         const ticketsArray = _.cloneDeep(state.tickets);
-        ticketsArray.forEach( el => {
-          let segmentsCount = 0;
-          if(el?.segments?.length){
-            el.segments.forEach(segment => {
-              if(segment?.stops?.length) {
-                segmentsCount = segmentsCount + segment.stops.length;
-              }
-            })
-          }
-          el.segmentsCount = segmentsCount;
-        });
         let filterArray =  payload.filter(elem => elem !== 'all')
         let filterTicketsArray = []
         filterArray.forEach( val => {
