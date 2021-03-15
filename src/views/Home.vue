@@ -6,6 +6,7 @@
         <SearchFilter/>
       </aside>
       <main >
+        <SearchListFilter/>
         <p class="error" v-if="hasError">Извините! Возникли проблемы </p>
         <SearchList v-if="!loading && !hasError"/>
          
@@ -19,6 +20,7 @@
 import { mapActions, mapGetters } from 'vuex'
 import SearchList from '@/components/SearchList.vue'
 import SearchFilter from '@/components/SearchFilter.vue'
+import SearchListFilter from '@/components/SearchListFilter.vue'
 import Header from '@/components/Header.vue'
 
 export default {
@@ -26,6 +28,7 @@ export default {
   components: {
     SearchList,
     SearchFilter,
+    SearchListFilter,
     Header,
   },
   async mounted () {

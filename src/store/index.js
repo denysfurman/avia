@@ -12,10 +12,21 @@ export default new Vuex.Store({
     stopSearch: false,
     hasError: false,
     filterTickets: [],
+    filterList: 'price',
   },
   getters: {
     loading: state => state.loading,
-    tickets: state => _.orderBy(state.filterTickets.slice(0, 5), ['price']),
+    tickets: state => {
+      if(state.filterList ==='price') {
+        return   _.orderBy(state.filterTickets, ['price']).slice(0, 5);
+      } else if(state.filterList ==='quickly') {
+        return   _.orderBy(state.filterTickets, ['segmentsAllDuration']).slice(0, 5);
+      } 
+      else {
+        return  state.filterTickets.slice(0, 5);
+      }
+    },
+    filterListValue: state => state.filterList,
     hasError: state => state.hasError,
   },
   mutations: {
@@ -26,14 +37,19 @@ export default new Vuex.Store({
       state.stopSearch = payload.stop;
       payload.tickets.forEach( el => {
         let segmentsCount = 0;
+        let segmentsAllDuration = 0;
         if(el?.segments?.length){
           el.segments.forEach(segment => {
             if(segment?.stops?.length) {
               segmentsCount = segmentsCount + segment.stops.length;
             }
+            if(segment?.duration) {
+              segmentsAllDuration = segmentsAllDuration + parseInt(segment.duration);
+            }
           })
         }
         el.segmentsCount = segmentsCount;
+        el.segmentsAllDuration = segmentsAllDuration;
       });
       state.tickets = [...state.tickets, ...payload.tickets];
       state.filterTickets = state.tickets;
@@ -49,11 +65,13 @@ export default new Vuex.Store({
         let filterArray =  payload.filter(elem => elem !== 'all')
         let filterTicketsArray = []
         filterArray.forEach( val => {
-          filterTicketsArray = [...ticketsArray.filter(elem => parseInt(elem.segmentsCount) === parseInt(val)), ...filterTicketsArray ]
+          filterTicketsArray = [...filterTicketsArray , ...ticketsArray.filter(elem => parseInt(elem.segmentsCount) === parseInt(val))  ]
         });
         state.filterTickets = filterTicketsArray;
       }
-      
+    },
+    SET_FILTER_LIST_TICKETS: (state, payload) => {
+      state.filterList = payload;
     }
   },
   actions: {
@@ -85,6 +103,9 @@ export default new Vuex.Store({
     },
     async fillterStopsTickets ({commit}, payload) {
       commit ('SET_FILTER_STOP_TICKETS', payload);
+    },
+    async fillterListTickets ({commit}, payload) {
+      commit ('SET_FILTER_LIST_TICKETS', payload);
     },
   }
 })
