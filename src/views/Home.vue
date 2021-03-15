@@ -9,9 +9,7 @@
         <SearchListFilter/>
         <p class="error" v-if="hasError">Извините! Возникли проблемы </p>
         <SearchList v-if="!loading && !hasError"/>
-         
       </main>
-      
     </div>
   </div>
 </template>

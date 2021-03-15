@@ -13,11 +13,6 @@ import {mapActions, mapGetters} from "vuex";
 
 export default {
   name: "SearchListFilter",
-  data(){
-    return {
-      
-    }
-  },
   computed: {
     ...mapGetters([ 'filterListValue',]),
   },

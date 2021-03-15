@@ -4,6 +4,7 @@
       <span class="list-item_title__price">{{item.price}} P</span>
       <img :src="`//pics.avs.io/99/36/${item.carrier}.png`" class="list-item_title__logo"/>
     </div>
+    
     <div class="list-item_detail">
       <div class="list-item_detail__item">
         <span class="item-description">
@@ -13,12 +14,14 @@
           {{$moment(item.segments[0].date).format('HH:mm')}}  - {{$moment(item.segments[0].date).add(item.segments[0].duration, 'minutes').format('HH:mm ')}}
         </span>
       </div>
+      
       <div class="list-item_detail__item">
         <span class="item-description">В пути</span>
         <span class="item-inform" v-if="item.segments[0].duration">
           {{this.getTimeFromMins(item.segments[0].duration)}}
         </span>
       </div>
+      
       <div  class="list-item_detail__item">
         <span class="item-description">
           <template v-if="item.segments[0].stops.length">
@@ -33,7 +36,7 @@
         </span>
       </div> 
     </div>
-
+    
     <div v-if="item.segments.length > 1" class="list-item_detail">
       <div class="list-item_detail__item">
         <span class="item-description">
@@ -43,12 +46,14 @@
           {{$moment(item.segments[1].date).format('HH:mm')}}  - {{$moment(item.segments[1].date).add(item.segments[1].duration, 'minutes').format('HH:mm ')}}
         </span>
       </div>
+      
       <div class="list-item_detail__item">
         <span class="item-description">В пути</span>
         <span class="item-inform" v-if="item.segments[1].duration">
           {{this.getTimeFromMins(item.segments[1].duration)}}
         </span>
       </div>
+      
       <div  class="list-item_detail__item">
         <span class="item-description">
           <template v-if="item.segments[1].stops.length">
@@ -62,6 +67,7 @@
           {{item.segments[1].stops.join(', ')}}
         </span>
       </div>
+      
     </div>
   </div>
 </template>
